@@ -1,0 +1,3 @@
+[submodule "max-ecommerce-products"]
+	path = max-ecommerce-products
+	url = https://github.com/IamMax279/MaxEcommerceServer.git

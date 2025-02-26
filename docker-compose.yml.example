@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  users:
+    build:
+      context: ./max-ecommerce
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=postgresql://<db-username>:<db-password>@<db-container-name>:<db-port>/<db-name>?schema=public
+      - JWT_SECRET=
+      - EMAIL_USER=<google-email>
+      - EMAIL_PASS=<google-application-password>
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db1
+    networks:
+      - ecommerceNetwork
+  products:
+    build:
+      context: ./max-ecommerce-products
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=postgresql://<db-username>:<db-password>@<db-container-name>:<db-port>/<db-name>?schema=public
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db2
+      - redis
+    networks:
+      - ecommerceNetwork
+  orders:
+    build:
+      context: ./max-ecommerce-orders
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=postgresql://<db-username>:<db-password>@<db-container-name>:<db-port>/<db-name>?schema=public
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "3002:3002"
+    depends_on:
+      - db3
+      - redis
+    networks:
+      - ecommerceNetwork
+  gateway:
+    build:
+      context: ./max-ecommerce-gateway
+      dockerfile: Dockerfile
+    environment:
+      - JWT_SECRET=
+      - USERS_URL=http://...
+      - PRODUCTS_URL=http://...
+      - ORDERS_URL=http://...
+    ports:
+      - "3003:3003"
+    networks:
+      - ecommerceNetwork
+  db1:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=...
+      - POSTGRES_PASSWORD=...
+      - POSTGRES_USER=...
+    volumes:
+      - userdata:/var/lib/postgres/users
+    networks:
+      - ecommerceNetwork
+  db2:
+    image: postgres:16
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=maxecommerceproducts
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=postgres
+    volumes:
+      - productdata:/var/lib/postgres/products
+    networks:
+      - ecommerceNetwork
+  db3:
+    image: postgres:16
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=maxecommerceorders
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=postgres
+    volumes:
+      - orderdata:/var/lib/postgres/orders
+    networks:
+      - ecommerceNetwork
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - ecommerceNetwork
+    volumes:
+      - redisdata:/var/lib/redis
+
+volumes:
+  userdata:
+  productdata:
+  orderdata:
+  redisdata:
+
+networks:
+  ecommerceNetwork:
+    driver: bridge

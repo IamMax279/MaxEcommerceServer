@@ -1,0 +1,14 @@
+import { OrderInfo } from "./OrderTypes"
+
+export interface RestResponse {
+    success: boolean,
+    message: string
+}
+
+export interface SignInResponse extends RestResponse {
+    jwt?: string
+}
+
+export interface OrderResult extends RestResponse {
+    orders?: OrderInfo[] | OrderInfo
+}
