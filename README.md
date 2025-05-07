@@ -13,4 +13,5 @@ To run the api on your machine, you'll need to implement the following in the do
 - pg username
 - pg password
 - jwt secret
+
 The api uses nodemailer for sending emails, so you'll need to use your own email and app password for your google account (if you want to use gmail transporter).
