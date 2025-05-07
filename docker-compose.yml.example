@@ -6,8 +6,8 @@ services:
       context: ./max-ecommerce
       dockerfile: Dockerfile
     environment:
-      - DATABASE_URL=postgresql://<db-username>:<db-password>@<db-container-name>:<db-port>/<db-name>?schema=public
-      - JWT_SECRET=
+      - DATABASE_URL=postgresql://<username>:<password>@db1:5432/maxecommerce?schema=public
+      - JWT_SECRET=IMPLEMENT
       - EMAIL_USER=<google-email>
       - EMAIL_PASS=<google-application-password>
     ports:
@@ -21,7 +21,7 @@ services:
       context: ./max-ecommerce-products
       dockerfile: Dockerfile
     environment:
-      - DATABASE_URL=postgresql://<db-username>:<db-password>@<db-container-name>:<db-port>/<db-name>?schema=public
+      - DATABASE_URL=postgresql://<username>:<password>@db2:5432/maxecommerceproducts?schema=public
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - PORT=3001
@@ -37,7 +37,7 @@ services:
       context: ./max-ecommerce-orders
       dockerfile: Dockerfile
     environment:
-      - DATABASE_URL=postgresql://<db-username>:<db-password>@<db-container-name>:<db-port>/<db-name>?schema=public
+      - DATABASE_URL=postgresql://<username>:<password>@db3:5432/maxecommerceorders?schema=public
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     ports:
@@ -52,10 +52,10 @@ services:
       context: ./max-ecommerce-gateway
       dockerfile: Dockerfile
     environment:
-      - JWT_SECRET=
-      - USERS_URL=http://...
-      - PRODUCTS_URL=http://...
-      - ORDERS_URL=http://...
+      - JWT_SECRET=IMPLEMENT
+      - USERS_URL=http://users:3000/user
+      - PRODUCTS_URL=http://products:3001/product
+      - ORDERS_URL=http://orders:3002/order
     ports:
       - "3003:3003"
     networks:
@@ -78,8 +78,8 @@ services:
       - "5433:5432"
     environment:
       - POSTGRES_DB=maxecommerceproducts
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=...
+      - POSTGRES_USER=...
     volumes:
       - productdata:/var/lib/postgres/products
     networks:
@@ -90,8 +90,8 @@ services:
       - "5434:5432"
     environment:
       - POSTGRES_DB=maxecommerceorders
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=...
+      - POSTGRES_USER=...
     volumes:
       - orderdata:/var/lib/postgres/orders
     networks:
