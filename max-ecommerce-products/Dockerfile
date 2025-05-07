@@ -18,4 +18,4 @@ COPY --from=build /app/package*.json ./
 COPY --from=build /app/node_modules ./node_modules
 EXPOSE 3000
 ENV NODE_ENV=prod
-CMD npx prisma migrate deploy && npm run start:prod
+CMD npx prisma migrate deploy && npx prisma db seed && npm run start:prod
