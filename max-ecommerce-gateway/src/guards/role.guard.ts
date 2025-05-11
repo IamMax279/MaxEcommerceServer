@@ -7,7 +7,6 @@ export class RoleGuard implements CanActivate {
         const auth: String = client.headers['authorization']
 
         if(!auth || !auth.startsWith("Bearer ")) {
-            console.log("no token found")
             return false
         }
 
@@ -15,7 +14,6 @@ export class RoleGuard implements CanActivate {
         const payload = JSON.parse(atob(token.split('.')[1]))
 
         if(!payload || payload.role !== 'ADMIN') {
-            console.log("user is not allowed to perform this action")
             return false
         }
 

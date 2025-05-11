@@ -10,7 +10,6 @@ export class AuthGuard implements CanActivate {
         const auth: String = client.headers['authorization']
 
         if(!auth || !auth.startsWith("Bearer ")) {
-            console.log("no token found")
             return false
         }
 
@@ -19,10 +18,6 @@ export class AuthGuard implements CanActivate {
             jwt.verify(token, process.env.JWT_SECRET!)
             return true
         } catch(error) {
-            console.log(`error verifying jwt: 
-                ${error instanceof Error ? error.message
-                    : "invalid jwt"
-                }`)
             return false
         }
     }
