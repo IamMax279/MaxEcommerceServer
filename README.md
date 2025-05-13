@@ -1,5 +1,5 @@
 # MaxEcommerceServer #
-This is just an examplary api for an ecommerce platform.
+This is an examplary api for an ecommerce platform.
 
 ## Tech Stack ##
 - Nestjs
